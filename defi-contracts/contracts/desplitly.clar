@@ -2,6 +2,9 @@
 (define-constant ERR-ALREADY-PAID-THIS-EXPENSE u102)
 (define-constant ERR-EXPENSE-NOT-FOUND u103)
 (define-constant ERR-NOT-EXPENSE-CREATOR u104)
+(define-constant ERR-ALL-OWNED-AMOUNT-NOT-EQUAL-TOTAL-AMOUNT u105)
+(define-constant ERR-EXPENSE-ID-EXIST u106)
+(define-constant ERR-EXPENSE-INACTIVE u107)
 
 
 ;; list of expenses  
@@ -24,14 +27,16 @@
 
 
 ;; Create a new expense 
+;; #[allow(unchecked_data)]
 (define-public (create-expense (id (string-ascii 256) ) (name (string-ascii 256)) (description (string-ascii 512)) (img (string-ascii 256)) 
-        (date (string-ascii 20)) (total uint) (paid (list 10 principal)) (unpaid (list 10 { sharer: principal, owned-amount: uint } )) )
+        (date (string-ascii 20)) (total uint) (unpaid (list 10 { sharer: principal, owned-amount: uint } )) )
         (let ( 
-            ;; (current-product-ids (get-product-ids-by-seller tx-sender)) 
-            ;; (new-ids (unwrap-panic (as-max-len? (append current-product-ids id) u2500) ))
+            (sum (fold cal-amount unpaid {total-by-sharers: u0}))
         )
-            ;; add to mutual-expense with status true for paid list
-            ;; (fold add-personal-expense paid { creator: tx-sender, amount: total, id: id, paid: true})
+            ;; check (the total owned-amount == amount) => split the bill correctly!
+            (asserts! (is-eq (get total-by-sharers sum) total) (err ERR-ALL-OWNED-AMOUNT-NOT-EQUAL-TOTAL-AMOUNT))
+
+            (asserts! (is-none (map-get? expenses {id: id} )) (err ERR-EXPENSE-ID-EXIST)) 
             ;; add to mutual-expense with status false for unpaid list
             (fold add-personal-expense unpaid { creator: tx-sender, amount: total, id: id, paid: false})
             ;; add to expenses map
@@ -40,6 +45,7 @@
 )) 
 
 ;; Update an expense 
+;; #[allow(unchecked_data)]
 (define-public (update-expense (id (string-ascii 256) ) (name (string-ascii 256)) (description (string-ascii 512)) (img (string-ascii 256)) 
         (date (string-ascii 20)) (total uint) (status bool))
         (let ( 
@@ -58,7 +64,7 @@
 ;; 1. Check if this tx-sender is a valid splitter or not 
 ;; 2. Transfer STX from tx-sender to the expense's creator 
 ;; 3. Change status of unpaid array and paid array 
-
+;; #[allow(unchecked_data)]
 (define-public (pay-expense (id (string-ascii 256)) (creator principal) )
         (let ( 
             ;; get mutal expense's details to update later
@@ -78,17 +84,19 @@
             ;; calculate new receive amount 
             (new-receive-amount (+ receive owned-amount))
         )
+            ;; make sure mutual-expense is not paid 
             (asserts! (is-eq paid false) (err ERR-ALREADY-PAID-THIS-EXPENSE) )
-            ;; TODO: check if already paid, don't allow sharer to pay anymore!
+            ;; only pay for active expense
+            (asserts! (is-eq status true) (err ERR-EXPENSE-INACTIVE ))
+            
             (try! (stx-transfer? owned-amount tx-sender creator))
             ;; if creator receives enough amout for the bill, auto change status to `true`
             (if (is-eq new-receive-amount total)
                 ;; update expense with  status = true
-                (map-set expenses {id: id} { creator: creator, total: total, receive: new-receive-amount, name: name, img: img, description: description, date: date, status: true})
+                (map-set expenses {id: id} { creator: creator, total: total, receive: new-receive-amount, name: name, img: img, description: description, date: date, status: false})
                 ;; update expense with current status
                 (map-set expenses {id: id} { creator: creator, total: total, receive: new-receive-amount, name: name, img: img, description: description, date: date, status: status})
             )
-            
             ;; update mutual expense with status: true 
             (map-set mutal-expenses {id: id, creator: creator , sharer: tx-sender} { amount: owned-amount, paid: true}) 
             (ok true)
@@ -98,7 +106,6 @@
 
 ;; Get expense's details by its id 
 (define-read-only (get-expense (id (string-ascii 256)))
-    ;; TODO: only owner can get expense  
     (map-get? expenses {id: id} )
 )
 
@@ -133,4 +140,14 @@
         (map-set mutal-expenses {id: id-value, creator: creator-address , sharer: sharer-value} { amount: owned-amount, paid: is-paid}) 
         (map-set my-expenses sharer-value updated-expense-ids)   
         { creator: creator-address, amount: amount-value, id: id-value, paid: is-paid})
+)
+(define-private (cal-amount (info {sharer: principal, owned-amount: uint} ) (value {total-by-sharers: uint}) )
+    (let
+        (
+            (sharer-value (get sharer info))
+            (owned-amount (get owned-amount info))
+
+            (total-value (get total-by-sharers value))
+        )
+        {total-by-sharers: (+ owned-amount total-value)})
 )
