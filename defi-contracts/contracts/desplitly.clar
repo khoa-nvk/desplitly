@@ -8,6 +8,9 @@
 
 
 ;; list of expenses  
+;; total: The total amount of the bill
+;; receive: Keep track how much creator has collected from sharers
+;; status: If status = true, don't let others pay this expense anymore 
 (define-map expenses { id: (string-ascii 256) } {
   creator: principal,
   name: (string-ascii 256),
@@ -23,13 +26,16 @@
         { paid: bool, amount: uint }
 ) 
 ;; list of expense of a user, then get details from 2 maps: `expenses` and `mutual-expenses` 
+;; if expense.creator == tx-sender => The tx-sender is the bill's creator 
+;; if expense.creator =! tx-sender => The tx-sender is the sharer who needs to pay the bill
 (define-map my-expenses principal (list 3000 (string-ascii 256)) )
 
 
 ;; Create a new expense 
+;; unpaid is the list of sharers, max 20 people
 ;; #[allow(unchecked_data)]
 (define-public (create-expense (id (string-ascii 256) ) (name (string-ascii 256)) (description (string-ascii 512)) (img (string-ascii 256)) 
-        (date (string-ascii 20)) (total uint) (unpaid (list 10 { sharer: principal, owned-amount: uint } )) )
+        (date (string-ascii 20)) (total uint) (unpaid (list 20 { sharer: principal, owned-amount: uint } )) )
         (let ( 
             (sum (fold cal-amount unpaid {total-by-sharers: u0}))
         )
@@ -122,7 +128,7 @@
     (map-get? my-expenses address) 
     )
 )
-
+;; use this function in create-expense to save details for sharers 
 (define-private (add-personal-expense (info {sharer: principal, owned-amount: uint} ) (parameters {creator: principal, amount: uint, id: (string-ascii 256), paid: bool} ))
     (let
         (
@@ -141,6 +147,8 @@
         (map-set my-expenses sharer-value updated-expense-ids)   
         { creator: creator-address, amount: amount-value, id: id-value, paid: is-paid})
 )
+;; use this function in the create-expense to 
+;; calculate the the total owned-amount of all sharers
 (define-private (cal-amount (info {sharer: principal, owned-amount: uint} ) (value {total-by-sharers: uint}) )
     (let
         (
