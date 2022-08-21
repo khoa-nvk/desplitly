@@ -1,10 +1,11 @@
-(define-constant ERR-NOT-FOUND-EXPENSE u101)
+
 (define-constant ERR-ALREADY-PAID-THIS-EXPENSE u102)
-(define-constant ERR-EXPENSE-NOT-FOUND u103)
-(define-constant ERR-NOT-EXPENSE-CREATOR u104)
-(define-constant ERR-ALL-OWNED-AMOUNT-NOT-EQUAL-TOTAL-AMOUNT u105)
-(define-constant ERR-EXPENSE-ID-EXIST u106)
-(define-constant ERR-EXPENSE-INACTIVE u107)
+(define-constant ERR-NOT-FOUND-MUTUAL-EXPENSE u103)
+(define-constant ERR-EXPENSE-NOT-FOUND u104)
+(define-constant ERR-NOT-EXPENSE-CREATOR u105)
+(define-constant ERR-ALL-OWNED-AMOUNT-NOT-EQUAL-TOTAL-AMOUNT u106)
+(define-constant ERR-EXPENSE-ID-EXIST u107)
+(define-constant ERR-EXPENSE-INACTIVE u108)
 
 
 ;; list of expenses  
@@ -39,10 +40,10 @@
         (let ( 
             (sum (fold cal-amount unpaid {total-by-sharers: u0}))
         )
-            ;; check (the total owned-amount == amount) => split the bill correctly!
-            (asserts! (is-eq (get total-by-sharers sum) total) (err ERR-ALL-OWNED-AMOUNT-NOT-EQUAL-TOTAL-AMOUNT))
-
+            ;; check if this expense is existing
             (asserts! (is-none (map-get? expenses {id: id} )) (err ERR-EXPENSE-ID-EXIST)) 
+            ;; check (the total owned-amount == amount) => split the bill correctly!
+            (asserts! (is-eq (get total-by-sharers sum) total) (err ERR-ALL-OWNED-AMOUNT-NOT-EQUAL-TOTAL-AMOUNT))    
             ;; add to mutual-expense with status false for unpaid list
             (fold add-personal-expense unpaid { creator: tx-sender, amount: total, id: id, paid: false})
             ;; add to expenses map
@@ -74,11 +75,11 @@
 (define-public (pay-expense (id (string-ascii 256)) (creator principal) )
         (let ( 
             ;; get mutal expense's details to update later
-            (mutual-expense (unwrap! (map-get? mutal-expenses {id: id, sharer: tx-sender, creator: creator} ) (err ERR-NOT-FOUND-EXPENSE) )) 
+            (mutual-expense (unwrap! (map-get? mutal-expenses {id: id, sharer: tx-sender, creator: creator} ) (err ERR-NOT-FOUND-MUTUAL-EXPENSE) )) 
             (owned-amount (get amount mutual-expense))
             (paid (get paid mutual-expense))
             ;; get  expense's details to update later
-            (expense (unwrap! (map-get? expenses {id: id} ) (err ERR-NOT-FOUND-EXPENSE) )) 
+            (expense (unwrap! (map-get? expenses {id: id} ) (err ERR-EXPENSE-NOT-FOUND) )) 
             
             (total (get total expense))
             (receive (get receive expense))
