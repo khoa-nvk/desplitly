@@ -1,4 +1,3 @@
-
 (define-constant ERR-ALREADY-PAID-THIS-EXPENSE u102)
 (define-constant ERR-NOT-FOUND-MUTUAL-EXPENSE u103)
 (define-constant ERR-EXPENSE-NOT-FOUND u104)

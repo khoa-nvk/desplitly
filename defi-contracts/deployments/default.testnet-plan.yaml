@@ -10,7 +10,7 @@ plan:
       transactions:
         - contract-publish:
             contract-name: desplitly
-            expected-sender: ST2VNTSDD188N95Q4QVKHCNXYTBQ7BHAX2E011M2H
-            cost: 75810
+            expected-sender: ST1PRPSPV9CD3KDX3CMZNHXHT4XD2REWHC7P0YKYY
+            cost: 1581000
             path: contracts/desplitly.clar
             anchor-block-only: true
