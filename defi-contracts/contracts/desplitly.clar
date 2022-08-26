@@ -15,10 +15,10 @@
   creator: principal,
   name: (string-ascii 256),
   img: (string-ascii 256),
-  description: (string-ascii 512),
-  total: uint, ;; total amount of the bill
+  description: (string-utf8 512),
+  total: uint, ;; total amount of the bill minus the amount of paid from creator
   receive: uint,
-  date: (string-ascii 20),
+  date: (string-ascii 50),
   status: bool
 })
 ;; use this map to keep track of status of an expense between creator and sharer
@@ -34,8 +34,8 @@
 ;; Create a new expense 
 ;; unpaid is the list of sharers, max 20 people
 ;; #[allow(unchecked_data)]
-(define-public (create-expense (id (string-ascii 256) ) (name (string-ascii 256)) (description (string-ascii 512)) (img (string-ascii 256)) 
-        (date (string-ascii 20)) (total uint) (unpaid (list 20 { sharer: principal, owned-amount: uint } )) )
+(define-public (create-expense (id (string-ascii 256) ) (name (string-ascii 256)) (description (string-utf8 512)) (img (string-ascii 256)) 
+        (date (string-ascii 50)) (total uint) (unpaid (list 20 { sharer: principal, owned-amount: uint } )) )
         (let ( 
             (sum (fold cal-amount unpaid {total-by-sharers: u0}))
         )
@@ -52,12 +52,13 @@
 
 ;; Update an expense 
 ;; #[allow(unchecked_data)]
-(define-public (update-expense (id (string-ascii 256) ) (name (string-ascii 256)) (description (string-ascii 512)) (img (string-ascii 256)) 
-        (date (string-ascii 20)) (total uint) (status bool))
+(define-public (update-expense (id (string-ascii 256) ) (name (string-ascii 256)) (description (string-utf8 512)) (img (string-ascii 256)) 
+        (date (string-ascii 50)) (status bool))
         (let ( 
             (expense (unwrap! (map-get? expenses {id: id}) (err ERR-EXPENSE-NOT-FOUND) ))
             (creator (get creator expense)) 
             (receive (get receive expense))
+            (total (get receive expense))
         )
             (asserts! (is-eq creator tx-sender) (err ERR-NOT-EXPENSE-CREATOR))
             ;; add to expenses map
@@ -119,7 +120,6 @@
 (define-read-only (get-mutual-expense (id (string-ascii 256)) (creator principal) (sharer principal) )
     (map-get? mutal-expenses {id: id, creator: creator, sharer: sharer} )
 )
-
 
 ;; Get my expenses' ids 
 (define-read-only (get-my-expenses-list (address principal))
