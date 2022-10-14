@@ -9,7 +9,7 @@ plan:
     - id: 0
       transactions:
         - contract-publish:
-            contract-name: desplitly5
+            contract-name: desplitly6
             expected-sender: ST1PRPSPV9CD3KDX3CMZNHXHT4XD2REWHC7P0YKYY
             cost: 1581000
             path: contracts/desplitly.clar

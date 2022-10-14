@@ -8,8 +8,14 @@ boot_contracts = ["pox", "costs-v2", "bns"]
 
 [project.cache_location]
 path = "./.requirements"
+[contracts.dst]
+path = "contracts/dst.clar"
+
 [contracts.desplitly]
 path = "contracts/desplitly.clar"
+
+[contracts.sip-010]
+path = "contracts/sip-010.clar"
 
 [repl]
 costs_version = 2

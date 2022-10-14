@@ -1,3 +1,7 @@
+;; traits uses
+(use-trait sip-010 .sip-010.sip010-ft-trait)
+
+;; errors
 (define-constant ERR-ALREADY-PAID-THIS-EXPENSE u102)
 (define-constant ERR-NOT-FOUND-MUTUAL-EXPENSE u103)
 (define-constant ERR-EXPENSE-NOT-FOUND u104)
@@ -7,10 +11,10 @@
 (define-constant ERR-EXPENSE-INACTIVE u108)
 
 
-;; list of expenses  
-;; total: The total amount of the bill
-;; receive: Keep track how much creator has collected from sharers
-;; status: If status = true, don't let others pay this expense anymore 
+;; Expense map 
+;; <total>: The total amount of the bill
+;; <receive>: Keep track how much creator has collected from sharers
+;; <status>: If status = true, don't let others pay this expense anymore 
 (define-map expenses { id: (string-ascii 256) } {
   creator: principal,
   name: (string-ascii 256),
@@ -158,4 +162,9 @@
             (total-value (get total-by-sharers value))
         )
         {total-by-sharers: (+ owned-amount total-value)})
+)
+
+
+(define-public (transfer-dst (contract <sip-010>) (amount uint) (recipient principal)) 
+   (contract-call? contract transfer amount tx-sender recipient none)
 )
