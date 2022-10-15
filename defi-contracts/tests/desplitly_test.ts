@@ -22,7 +22,7 @@ Clarinet.test({
         let wallet1 = accounts.get("wallet_1")!;
         let block = chain.mineBlock([
             Tx.contractCall(contractPrincipal(deployer), "create-expense", 
-            [types.ascii("expense001"),types.ascii("expense 1"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
+            [types.ascii("expense001"),types.ascii("expense 1"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
             types.list([types.tuple({"sharer": types.principal("STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6"), "owned-amount": types.uint(1000000)  }), 
             types.tuple({"sharer": types.principal("ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP"), "owned-amount": types.uint(5000000)  }),
             types.tuple({"sharer": types.principal("ST3PF13W7Z0RRM42A8VZRVFQ75SV1K26RXEP8YGKJ"), "owned-amount": types.uint(4000000)  })
@@ -41,7 +41,7 @@ Clarinet.test({
         let wallet1 = accounts.get("wallet_1")!;
         let block = chain.mineBlock([
             Tx.contractCall(contractPrincipal(deployer), "create-expense", 
-            [types.ascii("expense001"),types.ascii("expense 1"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
+            [types.ascii("expense001"),types.ascii("expense 1"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
             types.list([types.tuple({"sharer": types.principal("STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6"), "owned-amount": types.uint(1000000)  }), 
             types.tuple({"sharer": types.principal("ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP"), "owned-amount": types.uint(5000000)  }),
             types.tuple({"sharer": types.principal("ST3PF13W7Z0RRM42A8VZRVFQ75SV1K26RXEP8YGKJ"), "owned-amount": types.uint(40000000)  })
@@ -60,7 +60,7 @@ Clarinet.test({
         let wallet1 = accounts.get("wallet_1")!;
         let block = chain.mineBlock([
             Tx.contractCall(contractPrincipal(deployer), "create-expense", 
-            [types.ascii("expense001"),types.ascii("expense 1"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
+            [types.ascii("expense001"),types.ascii("expense 1"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
             types.list([types.tuple({"sharer": types.principal("STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6"), "owned-amount": types.uint(1000000)  }), 
             types.tuple({"sharer": types.principal("ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP"), "owned-amount": types.uint(5000000)  }),
             types.tuple({"sharer": types.principal("ST3PF13W7Z0RRM42A8VZRVFQ75SV1K26RXEP8YGKJ"), "owned-amount": types.uint(4000000)  })
@@ -68,7 +68,7 @@ Clarinet.test({
             wallet1.address) ,
 
             Tx.contractCall(contractPrincipal(deployer), "create-expense", 
-            [types.ascii("expense001"),types.ascii("expense 1"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
+            [types.ascii("expense001"),types.ascii("expense 1"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
             types.list([types.tuple({"sharer": types.principal("STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6"), "owned-amount": types.uint(1000000)  }), 
             types.tuple({"sharer": types.principal("ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP"), "owned-amount": types.uint(5000000)  }),
             types.tuple({"sharer": types.principal("ST3PF13W7Z0RRM42A8VZRVFQ75SV1K26RXEP8YGKJ"), "owned-amount": types.uint(4000000)  })
@@ -89,7 +89,7 @@ Clarinet.test({
         let wallet1 = accounts.get("wallet_1")!;
         let block = chain.mineBlock([
             Tx.contractCall(contractPrincipal(deployer), "create-expense", 
-            [types.ascii("expense001"),types.ascii("expense 1"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
+            [types.ascii("expense001"),types.ascii("expense 1"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
             types.list([types.tuple({"sharer": types.principal("STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6"), "owned-amount": types.uint(1000000)  }), 
             types.tuple({"sharer": types.principal("ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP"), "owned-amount": types.uint(5000000)  }),
             types.tuple({"sharer": types.principal("ST3PF13W7Z0RRM42A8VZRVFQ75SV1K26RXEP8YGKJ"), "owned-amount": types.uint(4000000)  })
@@ -97,7 +97,7 @@ Clarinet.test({
             wallet1.address),
 
             Tx.contractCall(contractPrincipal(deployer), "update-expense", 
-            [types.ascii("expense001"),types.ascii("expense 1 updated"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"), types.bool(false)
+            [types.ascii("expense001"),types.ascii("expense 1 updated"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"), types.bool(false)
         ],wallet1.address) ])
         
         let [createExpense, updateExpense] = block.receipts;
@@ -113,7 +113,7 @@ Clarinet.test({
         let wallet1 = accounts.get("wallet_1")!;
         let block = chain.mineBlock([
             Tx.contractCall(contractPrincipal(deployer), "create-expense", 
-            [types.ascii("expense001"),types.ascii("expense 1"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
+            [types.ascii("expense001"),types.ascii("expense 1"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
             types.list([types.tuple({"sharer": types.principal("STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6"), "owned-amount": types.uint(1000000)  }), 
             types.tuple({"sharer": types.principal("ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP"), "owned-amount": types.uint(5000000)  }),
             types.tuple({"sharer": types.principal("ST3PF13W7Z0RRM42A8VZRVFQ75SV1K26RXEP8YGKJ"), "owned-amount": types.uint(4000000)  })
@@ -121,7 +121,7 @@ Clarinet.test({
             wallet1.address),
 
             Tx.contractCall(contractPrincipal(deployer), "update-expense", 
-            [types.ascii("expense002"),types.ascii("expense 1 updated"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"), types.bool(false)
+            [types.ascii("expense002"),types.ascii("expense 1 updated"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"), types.bool(false)
         ],wallet1.address)])
         
         let [createExpense, updateExpense] = block.receipts;
@@ -138,7 +138,7 @@ Clarinet.test({
         let wallet2 = accounts.get("wallet_2")!;
         let block = chain.mineBlock([
             Tx.contractCall(contractPrincipal(deployer), "create-expense", 
-            [types.ascii("expense001"),types.ascii("expense 1"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
+            [types.ascii("expense001"),types.ascii("expense 1"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
             types.list([types.tuple({"sharer": types.principal("STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6"), "owned-amount": types.uint(1000000)  }), 
             types.tuple({"sharer": types.principal("ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP"), "owned-amount": types.uint(5000000)  }),
             types.tuple({"sharer": types.principal("ST3PF13W7Z0RRM42A8VZRVFQ75SV1K26RXEP8YGKJ"), "owned-amount": types.uint(4000000)  })
@@ -146,7 +146,7 @@ Clarinet.test({
             wallet1.address),
 
             Tx.contractCall(contractPrincipal(deployer), "update-expense", 
-            [types.ascii("expense001"),types.ascii("expense 1 updated"),types.utf8("description"),types.ascii("image.link")
+            [types.ascii("expense001"),types.ascii("expense 1 updated"),types.ascii("description"),types.ascii("image.link")
             ,types.ascii("22/02/2022"), types.bool(false)
         ],wallet2.address)])
         
@@ -171,7 +171,7 @@ Clarinet.test({
         let block = chain.mineBlock([
             // wallet 5 creates an expense
             Tx.contractCall(contractPrincipal(deployer), "create-expense", 
-            [types.ascii(expenseID),types.ascii("expense 1"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
+            [types.ascii(expenseID),types.ascii("expense 1"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
             types.list([types.tuple({"sharer": types.principal(wallet1.address), "owned-amount": types.uint(OWNED_AMOUNT) }), 
             types.tuple({"sharer": types.principal(wallet2.address), "owned-amount": types.uint(5000000)  }),
             types.tuple({"sharer": types.principal(wallet3.address), "owned-amount": types.uint(4000000)  })
@@ -207,7 +207,7 @@ Clarinet.test({
         let block = chain.mineBlock([
             // wallet 5 creates an expense
             Tx.contractCall(contractPrincipal(deployer), "create-expense", 
-            [types.ascii(expenseID),types.ascii("expense 1"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
+            [types.ascii(expenseID),types.ascii("expense 1"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
             types.list([types.tuple({"sharer": types.principal(wallet1.address), "owned-amount": types.uint(OWNED_AMOUNT) }), 
             types.tuple({"sharer": types.principal(wallet2.address), "owned-amount": types.uint(5000000)  }),
             types.tuple({"sharer": types.principal(wallet3.address), "owned-amount": types.uint(4000000)  })
@@ -216,7 +216,7 @@ Clarinet.test({
 
             // creator changes expense's status to false
             Tx.contractCall(contractPrincipal(deployer), "update-expense", 
-            [types.ascii("expense001"),types.ascii("expense 1 updated"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"), types.bool(false)
+            [types.ascii("expense001"),types.ascii("expense 1 updated"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"), types.bool(false)
         ],creator.address),
 
             // wallet 1 pays an expense
@@ -246,7 +246,7 @@ Clarinet.test({
         let block = chain.mineBlock([
             // wallet 5 creates an expense
             Tx.contractCall(contractPrincipal(deployer), "create-expense", 
-            [types.ascii(expenseID),types.ascii("expense 1"),types.utf8("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
+            [types.ascii(expenseID),types.ascii("expense 1"),types.ascii("description"),types.ascii("image.link"),types.ascii("22/02/2022"),types.uint(10000000), 
             types.list([types.tuple({"sharer": types.principal(wallet1.address), "owned-amount": types.uint(OWNED_AMOUNT) }), 
             types.tuple({"sharer": types.principal(wallet2.address), "owned-amount": types.uint(5000000)  }),
             types.tuple({"sharer": types.principal(wallet3.address), "owned-amount": types.uint(4000000)  })

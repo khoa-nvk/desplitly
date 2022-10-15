@@ -20,7 +20,7 @@
 	(ok (var-get nft-count))
 )
 (define-read-only (get-token-uri (id uint))
-    (ok (some (concat (concat (var-get ipfs-root) "{id}") ".json")))
+    (ok (some (concat (concat (var-get ipfs-root) "{id}") ".json"))) ;; Just stimulating, there is no json file on IPFS yet. 
 )
 
 (define-read-only (get-owner (id uint))
@@ -53,10 +53,11 @@
 (define-public (mint-with-dst (recipient principal) )
    (let 
       (
-      (data (contract-call? .desplitly get-summary-data ))
       (price (var-get nft-price))
       )
+      ;; send DST Token back to deployer 
       (try! (contract-call? .dst transfer price tx-sender 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM none))
+      ;; mint the NFT if user has enough DST tokens
       (try! (nft-mint? DeSplitly-NFT (var-get nft-count) recipient))
       (var-set nft-count (+ (var-get nft-count) u1) )
       (ok (- (var-get nft-count) u1))
