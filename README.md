@@ -1,17 +1,16 @@
 ## DeSplitly Introduction 
 
-DeSplitly is a decentrialized bill splitting. 
-
-You can easily share your bill with your friends on DeSplitly for free
+DeSplitly is a decentralized bill splitting. You can easily share your bill with your friends on DeSplitly to earn DSL tokens and exchange for NFTs.
 
 ![](/diagrams//DeSplitly.png)
 
 ## DeSplitly features 
 
-- Create expense and send it to your friends 
-- Pay an expense 
-- Receive DSL (DeSplitly Token) after a sharer pay back an owned amount of the bill 
-- Use DSL tokens to claim a DeSplitly NFT
+- Create expense and send it to your friends.
+- Update your expenses.
+- Sharer can pay an expense.
+- Receive DSL (DeSplitly Token) after a sharer pay back an owned amount of the bill. 
+- Use DSL tokens to claim a DeSplitly NFT.
 
 ## Sample command lines 
 
@@ -26,11 +25,11 @@ Switch to other user wallet
 
 `::set_tx_sender STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6` 
 
-Pay an expense and get DST token reward 
+Pay an expense and get DSL token reward 
 
 `(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.desplitly pay-expense "ex1" 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM)`
 
-Claim DeSplitlt NFT 
+Claim DeSplitly NFT 
 
 `(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.dsl-nft mint-with-dsl )`
 
