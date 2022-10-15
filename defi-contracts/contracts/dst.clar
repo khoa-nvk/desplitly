@@ -13,6 +13,12 @@
 (define-fungible-token DST u1000)
 
 ;;read-only functions
+(define-read-only (get-owner)
+	(ok owner)
+)
+(define-read-only (get-contract-name)
+  'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.desplitly ;; change to your deployed address later
+)
 (define-read-only (get-name)
 	(ok name)
 )
@@ -42,7 +48,7 @@
 )
 (define-public (mint (amount uint) (recipient principal)) 
   (begin
-    (asserts! (is-eq tx-sender owner) ERR_NOT_OWNER)
+    (asserts! (is-eq tx-sender contract-caller (get-contract-name )) ERR_NOT_OWNER)
 	  (ft-mint? DST amount recipient)
   )
 )

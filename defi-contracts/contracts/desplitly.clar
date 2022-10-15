@@ -1,6 +1,7 @@
 ;; traits uses
 (use-trait sip-010 .sip-010.sip010-ft-trait)
 
+
 ;; errors
 (define-constant ERR-ALREADY-PAID-THIS-EXPENSE u102)
 (define-constant ERR-NOT-FOUND-MUTUAL-EXPENSE u103)
@@ -10,6 +11,7 @@
 (define-constant ERR-EXPENSE-ID-EXIST u107)
 (define-constant ERR-EXPENSE-INACTIVE u108)
 
+(define-constant reward-ratio u100000) ;; 1STX paynback = 10 DST  
 
 ;; Expense map 
 ;; <total>: The total amount of the bill
@@ -19,10 +21,12 @@
   creator: principal,
   name: (string-ascii 256),
   img: (string-ascii 256),
-  description: (string-utf8 512),
+  description: (string-ascii 512),
   total: uint, ;; total amount of the bill minus the amount of paid from creator
   receive: uint,
   date: (string-ascii 50),
+;;   is_stx_bill: bool, ;; if true, sharers pay back the bill by STX, if not they pay back by a SIP-10 token
+;;   sip_10_address: <trait>,
   status: bool
 })
 ;; use this map to keep track of status of an expense between creator and sharer
@@ -38,7 +42,7 @@
 ;; Create a new expense 
 ;; unpaid is the list of sharers, max 20 people
 ;; #[allow(unchecked_data)]
-(define-public (create-expense (id (string-ascii 256) ) (name (string-ascii 256)) (description (string-utf8 512)) (img (string-ascii 256)) 
+(define-public (create-expense (id (string-ascii 256) ) (name (string-ascii 256)) (description (string-ascii 512)) (img (string-ascii 256)) 
         (date (string-ascii 50)) (total uint) (unpaid (list 20 { sharer: principal, owned-amount: uint } )) )
         (let ( 
             (sum (fold cal-amount unpaid {total-by-sharers: u0}))
@@ -50,13 +54,13 @@
             ;; add to mutual-expense with status false for unpaid list
             (fold add-personal-expense unpaid { creator: tx-sender, amount: total, id: id, paid: false})
             ;; add to expenses map
-            (map-set expenses {id: id} { creator: tx-sender, total: total, receive: u0, name: name, img: img, description: description, date: date, status: true})
+            (map-set expenses {id: id} { creator: tx-sender, total: total, receive: u0, name: name, img: img, description: description, date: date, status: true })
             (ok true)
 )) 
 
 ;; Update an expense 
 ;; #[allow(unchecked_data)]
-(define-public (update-expense (id (string-ascii 256) ) (name (string-ascii 256)) (description (string-utf8 512)) (img (string-ascii 256)) 
+(define-public (update-expense (id (string-ascii 256) ) (name (string-ascii 256)) (description (string-ascii 512)) (img (string-ascii 256)) 
         (date (string-ascii 50)) (status bool))
         (let ( 
             (expense (unwrap! (map-get? expenses {id: id}) (err ERR-EXPENSE-NOT-FOUND) ))
@@ -66,7 +70,7 @@
         )
             (asserts! (is-eq creator tx-sender) (err ERR-NOT-EXPENSE-CREATOR))
             ;; add to expenses map
-            (map-set expenses {id: id} { creator: tx-sender, total: total, receive: receive, name: name, img: img, description: description, date: date, status: status})
+            ;; (map-set expenses {id: id} { creator: tx-sender, total: total, receive: receive, name: name, img: img, description: description, date: date, status: status})
             (ok true)
 )) 
 
@@ -94,20 +98,29 @@
             (status (get status expense))
             ;; calculate new receive amount 
             (new-receive-amount (+ receive owned-amount))
+            (sharer tx-sender)
+            (reward-dst (/ owned-amount reward-ratio ))
         )
             ;; make sure mutual-expense is not paid 
             (asserts! (is-eq paid false) (err ERR-ALREADY-PAID-THIS-EXPENSE) )
             ;; only pay for active expense
             (asserts! (is-eq status true) (err ERR-EXPENSE-INACTIVE ))
             
-            (try! (stx-transfer? owned-amount tx-sender creator))
+            (try! (stx-transfer? owned-amount sharer creator))
+            
+            ;; calculate the reward DST token based on the ratio of owned-amount
+            
+            (try! (as-contract (contract-call? .dst mint reward-dst sharer)) )
+            
+            
+
             ;; if creator receives enough amout for the bill, auto change status to `true`
-            (if (is-eq new-receive-amount total)
-                ;; update expense with  status = true
-                (map-set expenses {id: id} { creator: creator, total: total, receive: new-receive-amount, name: name, img: img, description: description, date: date, status: false})
-                ;; update expense with current status
-                (map-set expenses {id: id} { creator: creator, total: total, receive: new-receive-amount, name: name, img: img, description: description, date: date, status: status})
-            )
+            ;; (if (is-eq new-receive-amount total)
+            ;;     ;; update expense with  status = true
+            ;;     (map-set expenses {id: id} { creator: creator, total: total, receive: new-receive-amount, name: name, img: img, description: description, date: date, status: false})
+            ;;     ;; update expense with current status
+            ;;     (map-set expenses {id: id} { creator: creator, total: total, receive: new-receive-amount, name: name, img: img, description: description, date: date, status: status})
+            ;; )
             ;; update mutual expense with status: true 
             (map-set mutal-expenses {id: id, creator: creator , sharer: tx-sender} { amount: owned-amount, paid: true}) 
             (ok true)
@@ -166,5 +179,32 @@
 
 
 (define-public (transfer-dst (contract <sip-010>) (amount uint) (recipient principal)) 
-   (contract-call? contract transfer amount tx-sender recipient none)
+   (as-contract (contract-call? contract transfer amount tx-sender recipient none))
 )
+
+(define-public (transfer-dst2 (contract <sip-010>) (amount uint) (recipient principal)) 
+   (begin
+    (print (contract-of contract))
+    (ok true)
+   ) 
+)
+
+
+
+
+;; (define-public (test-dst (expense-id (string-ascii 50)) (amount uint) (recipient principal)) 
+;;     (let ( 
+;;             (expense (unwrap! (map-get? expenses {id: expense-id}) (err ERR-EXPENSE-NOT-FOUND) ))
+;;             (sip10-contract (get sip_10_address expense))
+;;             (creator (get creator expense)) 
+;;             (receive (get receive expense))
+;;             (total (get receive expense))
+;;         )
+;;             ;; (asserts! (is-eq creator tx-sender) (err ERR-NOT-EXPENSE-CREATOR))
+;;             ;; add to expenses map
+;;             ;; (map-set expenses {id: id} { creator: tx-sender, total: total, receive: receive, name: name, img: img, description: description, date: date, status: status})
+         
+;;             ;; (contract-call? sip10-contract transfer amount tx-sender recipient none)
+;; ))
+
+;; TODO: 1/ Receive a DST TOKEN BASES ON THE AMOUNT OF STX PAYBACK. 2/ You can use DST to claim a NFT later 
