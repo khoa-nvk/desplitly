@@ -186,10 +186,20 @@ Clarinet.test({
         let [createExpense, payExpense] = block.receipts;
         createExpense.result.expectOk().expectBool(true);
         payExpense.result.expectOk().expectBool(true);
-        const event = payExpense.events[0].stx_transfer_event
-        assertEquals(Number(event.amount),OWNED_AMOUNT)
-        assertEquals(event.sender,wallet1.address)
-        assertEquals(event.recipient,creator.address)
+
+        const transfer_event = payExpense.events[0].stx_transfer_event
+        const mint_event = payExpense.events[1].ft_mint_event
+        
+        // assert transfer_event
+        assertEquals(Number(transfer_event.amount),OWNED_AMOUNT)
+        assertEquals(transfer_event.sender,wallet1.address)
+        assertEquals(transfer_event.recipient,creator.address)
+        
+        // console.log(mint_event)
+
+        // assert mint_event 
+        assertEquals(Number(mint_event.amount),OWNED_AMOUNT / 1000000 * 10) // 10 is the default reward ratio
+        assertEquals(transfer_event.recipient,creator.address)
     },
 });
 Clarinet.test({
