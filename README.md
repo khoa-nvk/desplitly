@@ -1,8 +1,10 @@
 ## DeSplitly Introduction 
 
-DeSplitly.com is a decentrialized bill splitting. 
+DeSplitly is a decentrialized bill splitting. 
 
 You can easily share your bill with your friends on DeSplitly for free
+
+![](/diagrams//DeSplitly.png)
 
 ## DeSplitly features 
 
@@ -43,11 +45,3 @@ Check account balances
 Pay the exenpse with the second sharer
 
 `(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.desplitly pay-expense "ex1" 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM)`
-
-## Status 
-
-DeSplitly.com is at the beta version that can have minor issues and bug. We can migrate to another contract, so please use DeSplitly as an experiment right now.
-
-We do not take any responsibility for your lost.
-
-We will announce the final version of DeSplitly soon.
