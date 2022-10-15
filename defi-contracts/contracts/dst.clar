@@ -2,7 +2,7 @@
 (impl-trait .sip-010.sip010-ft-trait)
 
 ;;error constants
-(define-constant ERR_NOT_OWNER (err u50))
+(define-constant ERR_NOT_OWNER (err u401))
 
 ;;constants
 (define-constant name "DeSplitly Token")

@@ -1,5 +1,7 @@
 ;; traits uses
+(use-trait sip-009 .sip-009.sip009-nft-trait)
 (use-trait sip-010 .sip-010.sip010-ft-trait)
+
 
 
 ;; errors
@@ -145,6 +147,9 @@
     (map-get? my-expenses address) 
     )
 )
+(define-public (get-summary-data )
+    (ok u5)
+)
 ;; use this function in create-expense to save details for sharers 
 (define-private (add-personal-expense (info {sharer: principal, owned-amount: uint} ) (parameters {creator: principal, amount: uint, id: (string-ascii 256), paid: bool} ))
     (let
@@ -182,29 +187,11 @@
    (as-contract (contract-call? contract transfer amount tx-sender recipient none))
 )
 
-(define-public (transfer-dst2 (contract <sip-010>) (amount uint) (recipient principal)) 
-   (begin
-    (print (contract-of contract))
-    (ok true)
-   ) 
-)
+;; (define-public (donate-nft (contract <sip-009>) (tokenId uint) (recipient principal)) 
+;;   (contract-call? contract transfer tokenId tx-sender recipient)
+;; )
 
 
 
-
-;; (define-public (test-dst (expense-id (string-ascii 50)) (amount uint) (recipient principal)) 
-;;     (let ( 
-;;             (expense (unwrap! (map-get? expenses {id: expense-id}) (err ERR-EXPENSE-NOT-FOUND) ))
-;;             (sip10-contract (get sip_10_address expense))
-;;             (creator (get creator expense)) 
-;;             (receive (get receive expense))
-;;             (total (get receive expense))
-;;         )
-;;             ;; (asserts! (is-eq creator tx-sender) (err ERR-NOT-EXPENSE-CREATOR))
-;;             ;; add to expenses map
-;;             ;; (map-set expenses {id: id} { creator: tx-sender, total: total, receive: receive, name: name, img: img, description: description, date: date, status: status})
-         
-;;             ;; (contract-call? sip10-contract transfer amount tx-sender recipient none)
-;; ))
 
 ;; TODO: 1/ Receive a DST TOKEN BASES ON THE AMOUNT OF STX PAYBACK. 2/ You can use DST to claim a NFT later 
