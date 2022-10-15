@@ -16,6 +16,10 @@
 (define-data-var reward-ratio uint u100000) ;; 1 STX paynback = 10 DST  
 
 ;; Expense map 
+;; @creator: Who creates the bill and already paid her/his part.
+;; @name: Name of the bill such as 'launch'
+;; @img: image's url of the bill
+;; @description: details of the bill
 ;; @total: Total amount of the bill not counting the amount of paid from creator
 ;; @receive: Keep track how much creator has collected from sharers
 ;; @status: If status = true, don't let others pay this expense anymore 

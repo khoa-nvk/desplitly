@@ -6,11 +6,11 @@
 
 ;;constants
 (define-constant name "DeSplitly Token")
-(define-constant symbol "SM")
-(define-constant decimal u2)
+(define-constant symbol "DST")
+(define-constant decimal u6)
 (define-constant owner tx-sender)
 
-(define-fungible-token DST u1000)
+(define-fungible-token DST u100000000000000)
 
 ;;read-only functions
 (define-read-only (get-owner)
