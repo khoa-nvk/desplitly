@@ -6,11 +6,11 @@
 
 ;;constants
 (define-constant name "DeSplitly Token")
-(define-constant symbol "DST")
+(define-constant symbol "DSL")
 (define-constant decimal u6)
 (define-constant owner tx-sender)
 
-(define-fungible-token DST u100000000000000)
+(define-fungible-token DSL u100000000000000)
 
 ;;read-only functions
 (define-read-only (get-owner)
@@ -29,10 +29,10 @@
 	(ok decimal)
 )
 (define-read-only (get-balance (sender principal))
-	(ok (ft-get-balance DST sender))
+	(ok (ft-get-balance DSL sender))
 )
 (define-read-only (get-total-supply)
-	(ok (ft-get-supply DST))
+	(ok (ft-get-supply DSL))
 )
 (define-read-only (get-token-uri)
 	(ok none)
@@ -41,7 +41,7 @@
 ;;public functions
 (define-public (transfer (amount uint) (sender principal) (recipient principal) (memo (optional (buff 34))))
     (begin
-        (try! (ft-transfer? DST amount sender recipient))
+        (try! (ft-transfer? DSL amount sender recipient))
         (match memo to-print (print to-print) 0x)
         (ok true)
     )
@@ -49,6 +49,6 @@
 (define-public (mint (amount uint) (recipient principal)) 
   (begin
     (asserts! (is-eq tx-sender contract-caller (get-contract-name )) ERR_NOT_OWNER)
-	  (ft-mint? DST amount recipient)
+	  (ft-mint? DSL amount recipient)
   )
 )

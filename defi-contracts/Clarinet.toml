@@ -12,15 +12,15 @@ path = "./.requirements"
 
 
 
-[contracts.dst]
-path = "contracts/dst.clar"
+[contracts.dsl]
+path = "contracts/dsl.clar"
 
 
 [contracts.desplitly]
 path = "contracts/desplitly.clar"
 
-[contracts.dst-nft]
-path = "contracts/dst-nft.clar"
+[contracts.dsl-nft]
+path = "contracts/dsl-nft.clar"
 
 [contracts.sip-009]
 path = "contracts/sip-009.clar"

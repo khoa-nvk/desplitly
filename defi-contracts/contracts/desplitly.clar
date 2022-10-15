@@ -13,7 +13,7 @@
 
 ;;variables
 
-(define-data-var reward-ratio uint u100000) ;; 1 STX paynback = 10 DST  
+(define-data-var reward-ratio uint u100000) ;; 1 STX paynback = 10 DSL
 
 ;; Expense map 
 ;; @creator: Who creates the bill and already paid her/his part.
@@ -106,7 +106,7 @@
             
             ;; get reward rate
             (rate (var-get reward-ratio))
-            (reward-dst (/ owned-amount rate ))
+            (reward-dsl (/ owned-amount rate ))
         )
             ;; make sure mutual-expense is not paid 
             (asserts! (is-eq paid false) (err ERR-ALREADY-PAID-THIS-EXPENSE) )
@@ -115,9 +115,9 @@
             
             (try! (stx-transfer? owned-amount sharer creator))
             
-            ;; calculate the reward DST token based on the ratio of owned-amount
+            ;; calculate the reward DSL token based on the ratio of owned-amount
             
-            (try! (as-contract (contract-call? .dst mint reward-dst sharer)) )
+            (try! (as-contract (contract-call? .dsl mint reward-dsl sharer)) )
             
             ;; if creator receives enough amout for the bill, auto change status to `true`
             (if (is-eq new-receive-amount total)

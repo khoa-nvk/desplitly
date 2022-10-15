@@ -10,8 +10,8 @@ You can easily share your bill with your friends on DeSplitly for free
 
 - Create expense and send it to your friends 
 - Pay an expense 
-- Receive DST (DeSplitly Token) after a sharer pay back an owned amount of the bill 
-- Use DST tokens to claim a DeSplitly NFT
+- Receive DSL (DeSplitly Token) after a sharer pay back an owned amount of the bill 
+- Use DSL tokens to claim a DeSplitly NFT
 
 ## Sample command lines 
 
@@ -32,7 +32,7 @@ Pay an expense and get DST token reward
 
 Claim DeSplitlt NFT 
 
-`(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.dst-nft mint-with-dst )`
+`(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.dsl-nft mint-with-dsl )`
 
 Check account balances 
 

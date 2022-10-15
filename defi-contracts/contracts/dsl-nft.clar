@@ -10,7 +10,7 @@
 
 
 ;;variables
-(define-data-var nft-price uint u10) ;; Price is in DST Token
+(define-data-var nft-price uint u10) ;; Price is in DSL Token
 (define-data-var nft-count uint u0)
 (define-data-var ipfs-root (string-ascii 80) "ipfs.io/ipfs/Qmf7jNRBzRYmjsxtRXo1MBjWMwrTm87V9BPRM4oqtyZdLN")
 
@@ -50,15 +50,15 @@
 )
 
 
-(define-public (mint-with-dst)
+(define-public (mint-with-dsl)
    (let 
       (
       (price (var-get nft-price))
       (nft-claimer tx-sender)
       )
-      ;; send DST Token back to deployer 
-      (try! (contract-call? .dst transfer price nft-claimer 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM none))
-      ;; mint the NFT if user has enough DST tokens
+      ;; send DSL Token back to deployer 
+      (try! (contract-call? .dsl transfer price nft-claimer 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM none))
+      ;; mint the NFT if user has enough DSL tokens
       (try! (nft-mint? DeSplitly-NFT (var-get nft-count) nft-claimer))
       (var-set nft-count (+ (var-get nft-count) u1) )
       (ok (- (var-get nft-count) u1))
